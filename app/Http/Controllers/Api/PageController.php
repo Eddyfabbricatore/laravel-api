@@ -9,19 +9,13 @@ use App\Models\Project;
 class PageController extends Controller
 {
     public function index(){
-        $projects = Project::all();
+        $projects = Project::with('technologies')->paginate(5);
         return response()->json($projects);
     }
 
-    public function prova(){
-        $user = [
-            'name' => 'Ugo',
-            'lastname' => 'De Ughi'
-        ];
-    
-        $success = true;
-    
-        // non restituisco una view ma un file json
-        return response()->json(compact('user', 'success'));
+    public function getProjectBySlug($slug){
+        // query che mi prende il progetto con lo slug corrispondente
+        $project = Project::where('slug', $slug)->with('technologies')->first();
+        return response()->json($project);
     }
 }
